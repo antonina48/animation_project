@@ -1,14 +1,14 @@
-"""Модуль математической модели физического поведения и параметров капель дождя."""
 
 import random
 from typing import List, Dict
 
 class RainModel:
-    """Физическая модель среды, рассчитывающая эффект трехмерного дождя."""
+
 
     def __init__(self, width: int, height: int, count: int) -> None:
         self.width = width
         self.height = height
+        self.initial_count = count
         self.speed_modifier = 1.0
         self.drops: List[Dict[str, float]] = []
         self.change_density(count)
@@ -32,6 +32,12 @@ class RainModel:
                 self.drops.append(self._create_drop(init_y=True))
         elif current_count > target_count:
             self.drops = self.drops[:target_count]
+
+    def reset(self) -> None:
+        """Сбрасывает состояние модели к начальным параметрам."""
+        self.speed_modifier = 1.0
+        self.drops.clear()
+        self.change_density(self.initial_count)
 
     def update(self) -> None:
         for drop in self.drops:
